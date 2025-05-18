@@ -1,0 +1,101 @@
+/* Footer Container */
+.footer {
+  background: linear-gradient(135deg, #2c3e50, #4a6491);
+  color: white;
+  padding: 2rem 0;
+  font-family: 'Poppins', sans-serif;
+  margin-top: auto;
+}
+
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Contact Section */
+.contactSection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem 3rem;
+  margin-bottom: 1rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contactIcon {
+  font-size: 1.2rem;
+  color: #4facfe;
+}
+
+.contactLink, .contactText {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contactLink:hover {
+  color: #4facfe;
+}
+
+/* Social Media Section */
+.socialSection {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: white;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.socialLink:hover {
+  background: #4facfe;
+  transform: translateY(-3px);
+}
+
+.socialIcon {
+  transition: transform 0.3s ease;
+}
+
+.socialLink:hover .socialIcon {
+  transform: scale(1.2);
+}
+
+/* Copyright */
+.copyright {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .contactSection {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .footerContent {
+    gap: 1rem;
+  }
+}

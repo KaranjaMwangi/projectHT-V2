@@ -1,0 +1,392 @@
+/* navbar.module.css */
+.navbar {
+  background: linear-gradient(45deg, #3a1c71, #d76d77, #ffaf7b);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 15px 25px;
+  font-family: 'Poppins', sans-serif;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.brand {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+}
+
+.brand:hover {
+  transform: scale(1.05);
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-nav .nav-link {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: white;
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.authLink {
+  font-size: 1.15rem !important;
+  font-weight: 500 !important;
+  padding: 8px 12px !important;
+  margin: 0 5px !important;
+  border-radius: 5px !important;
+  background: transparent !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.authLink:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  transform: translateY(-3px) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+@media (hover: hover) {
+  .navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.whatsappIcon {
+  color: #25d366;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.whatsappIcon:hover {
+  color: #128c7e;
+  transform: scale(1.2);
+}
+
+.phoneIcon {
+  color: #4facfe;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.phoneIcon:hover {
+  color: #00f2fe;
+  transform: scale(1.2);
+}
+
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.dropdown-item {
+  transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    padding-top: 15px;
+  }
+  
+  .nav-link {
+    margin: 5px 0;
+  }
+  
+  .authLink {
+    margin: 5px 0 !important;
+    width: fit-content !important;
+  }
+}
+
+/* Form Optimization Styles */
+.authContainer {
+  background-color: #f4f4f9;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.forms {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 123, 255, 0.2);
+  margin: 15px 0;
+}
+
+.form-group {
+  margin-bottom: 0.8rem;
+}
+
+.form-text {
+  display: none;
+}
+
+.form-control::placeholder {
+  color: #999;
+  font-style: italic;
+  opacity: 1;
+}
+
+/* Teacher Registration Specific */
+.teacher-registration .form-title {
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+/* Register Form Specific */
+.register-form .password-fields .form-label {
+  display: none;
+}
+
+/* Login Form Specific */
+.login-form .method-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-form .method-toggle .form-label {
+  margin-bottom: 0;
+}
+
+.login-form .method-toggle .toggle-link {
+  font-size: 0.9rem;
+}
+
+/* Forgot Password Specific */
+.forgot-password .form-control::placeholder {
+  color: transparent;
+}
+
+/* Keep all your existing styles below */
+.advertSection {
+  background-color: #f8f9fa;
+  color: #495057;
+  padding: 3rem 0;
+}
+
+/* ... (all your other existing styles remain exactly the same) ... */
+
+/* Form Titles - Simple Bootstrap-based solution */
+.text-primary {
+  color: #007bff !important; /* Ensures blue color */
+  font-weight: bold; /* Optional: if you want bold */
+  margin-bottom: 1rem; /* Consistent spacing */
+}
+
+
+/* Hero Section */
+.heroSection {
+  background: linear-gradient(to right, #f8f9fa, #e9f2ff);
+  padding: 1rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.heroContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.brandHighlight {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+}
+
+.brandName {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2c3e50;
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding: 0 3px;
+}
+
+.largeCommunity {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2563eb;
+  display: inline-block;
+  margin: 0 3px;
+}
+
+.heroText {
+  margin-bottom: 0.8rem;
+  color: #4a5568;
+}
+
+.callToAction {
+  margin-top: 0.8rem;
+  font-weight: 500;
+}
+
+.brandTagline {
+  font-weight: 700;
+  color: #1e40af;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.1rem;
+}
+
+/* Platform Cards */
+.platformCards {
+  margin-top: 1.5rem;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+}
+
+.platformCard {
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border: none;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.platformCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.platformCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+/* Quizizz card accent */
+.row.g-3 > div:nth-child(1) .platformCard::before {
+  background: linear-gradient(90deg, #FF6B6B 0%, #FF8E53 100%);
+}
+
+/* Kahoot card accent */
+.row.g-3 > div:nth-child(2) .platformCard::before {
+  background: linear-gradient(90deg, #7B66FF 0%, #5FBDFF 100%);
+}
+
+/* Google Classroom card accent */
+.row.g-3 > div:nth-child(3) .platformCard::before {
+  background: linear-gradient(90deg, #4285F4 0%, #34A853 100%);
+}
+
+.platformLogo {
+  height: 60px;
+  width: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.priceTag {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin: 10px 0;
+  text-align: center;
+  font-weight: bold;
+}
+
+.termInfo {
+  background: rgba(79, 172, 254, 0.1);
+  padding: 8px;
+  border-radius: 6px;
+  margin: 8px 0;
+  border-left: 3px solid #4facfe;
+  font-size: 0.9rem;
+}
+
+/* Hero Section Enhancements */
+.quizizzHighlight {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  padding: 0 3px;
+  display: inline-block;
+}
+
+.kahootHighlight {
+  background: linear-gradient(135deg,#000000  65% , #7B66FF 35%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  padding: 0 3px;
+  display: inline-block;
+}
+
+
+/* For the three-logo layout in the combined card */
+.combined-logos {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.combined-logos img {
+  height: 40px;
+  width: auto;
+}
