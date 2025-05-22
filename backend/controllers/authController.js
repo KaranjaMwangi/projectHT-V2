@@ -1,226 +1,345 @@
 const User = require('../models/userModel');
+const Teacher = require('../models/teacherModel');
+const Admin = require('../models/admin');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
-// JWT Configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
-const JWT_EXPIRES_IN = '20m'; // 20 minute expiration
+// Helper function to generate JWT token
+const generateToken = (user, role) => {
+  return jwt.sign(
+    { id: user._id, role },
+    process.env.JWT_SECRET,
+    { expiresIn: '8h' }
+  );
+};
 
-// Register User (Preserved all existing functionality)
+// Helper function to sanitize user data
+const sanitizeUserData = (user) => {
+  const userData = user.toObject();
+  delete userData.password;
+  delete userData.__v;
+  return userData;
+};
+
+// ADMIN CONTROLLERS
+exports.loginAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log('Admin login attempt for:', email);
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Email and password are required' 
+      });
+    }
+
+    // Check if admin exists
+    const admin = await Admin.findOne({ email });
+    if (!admin) {
+      console.log('No admin found with email:', email);
+      return res.status(401).json({ 
+        success: false,
+        error: 'Invalid admin credentials' 
+      });
+    }
+
+    // Verify password
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      console.log('Password mismatch for admin:', email);
+      return res.status(401).json({ 
+        success: false,
+        error: 'Invalid admin credentials' 
+      });
+    }
+
+    // Create and return token
+    const token = generateToken(admin, 'admin');
+    const adminData = sanitizeUserData(admin);
+
+    console.log('Admin login successful:', email);
+    res.status(200).json({
+      success: true,
+      token,
+      user: adminData,
+      message: 'Admin login successful'
+    });
+
+  } catch (error) {
+    console.error('Admin login error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Server error during admin login' 
+    });
+  }
+};
+
+// USER CONTROLLERS
 exports.registerUser = async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
 
-    // Existing validation
+    // Validate input
     if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Name, email, and password are required' });
+      return res.status(400).json({ 
+        success: false,
+        error: 'Name, email, and password are required' 
+      });
     }
 
-    const user = new User({ name, email, password });
-    if (phone) user.phone = phone;
+    // Check if user exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'User already exists' 
+      });
+    }
+
+    // Create new user
+    const user = new User({
+      name,
+      email,
+      password,
+      phone: phone || null
+    });
 
     await user.save();
 
-    // Modified to include phone in response and 20m expiry
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-    
-    res.status(201).json({ 
-      message: 'User registered successfully',
+    // Create and return token
+    const token = generateToken(user, 'user');
+    const userData = sanitizeUserData(user);
+
+    res.status(201).json({
+      success: true,
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role
-      }
+      user: userData,
+      message: 'User registered successfully'
     });
+
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      const errors = Object.values(error.errors).map(err => err.message);
-      return res.status(400).json({ error: errors.join(', ') });
-    }
-    if (error.code === 11000) {
-      const field = Object.keys(error.keyValue)[0];
-      return res.status(400).json({ error: `${field} must be unique` });
-    }
-    res.status(400).json({ error: error.message });
+    console.error('Registration error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Server error during registration' 
+    });
   }
 };
 
-// Login User (Preserved all existing functionality)
 exports.loginUser = async (req, res) => {
   try {
     const { email, phone, password } = req.body;
 
-    if (!password || (!email && !phone)) {
-      return res.status(400).json({ error: 'Email/phone and password are required' });
+    // Validate input
+    if ((!email && !phone) || !password) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Email/phone and password are required' 
+      });
     }
 
     // Find user by email or phone
-    const user = await User.findOne({
-      $or: [
-        { email: email || '' },
-        { phone: phone || '' }
-      ]
-    });
-    
-    if (!user) return res.status(404).json({ error: 'User not found' });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
-
-    // Modified to include 20m expiry
-    const token = jwt.sign({ 
-      id: user._id, 
-      role: user.role 
-    }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-
-    res.json({ 
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-        ...(user.subject && { subject: user.subject })
-      }
-    });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-// Verify Token (New implementation)
-exports.verifyToken = async (req, res) => {
-  try {
-    const token = req.headers.authorization.split(' ')[1];
-    const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.id).select('-password');
-    
+    const query = email ? { email } : { phone };
+    const user = await User.findOne(query);
     if (!user) {
-      return res.json({ valid: false });
+      return res.status(401).json({ 
+        success: false,
+        error: 'Invalid credentials' 
+      });
     }
 
-    res.json({
-      valid: true,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role
-      }
+    // Verify password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ 
+        success: false,
+        error: 'Invalid credentials' 
+      });
+    }
+
+    // Create and return token
+    const token = generateToken(user, 'user');
+    const userData = sanitizeUserData(user);
+
+    res.status(200).json({
+      success: true,
+      token,
+      user: userData,
+      message: 'Login successful'
     });
+
   } catch (error) {
-    res.json({ valid: false });
+    console.error('Login error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Server error during login' 
+    });
   }
 };
 
-// Logout (Preserved existing)
-exports.logout = async (req, res) => {
-  res.json({ message: 'Logged out successfully' });
-};
-
-// Reset Password (Preserved all existing functionality)
+// PASSWORD RESET
 exports.resetPassword = async (req, res) => {
   try {
     const { email, phone, newPassword } = req.body;
 
-    if (!newPassword || (!email && !phone)) {
-      return res.status(400).json({ error: 'Email/phone and new password are required' });
+    // Validate input
+    if ((!email && !phone) || !newPassword) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Email/phone and new password are required' 
+      });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Password must be at least 6 characters' 
+      });
     }
 
-    const user = await User.findOne({
-      $or: [
-        { email: email || '' },
-        { phone: phone || '' }
-      ]
-    });
-    
+    // Find user by email or phone
+    const query = email ? { email } : { phone };
+    const user = await User.findOne(query);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ 
+        success: false,
+        error: 'User not found' 
+      });
     }
 
+    // Update password
     user.password = newPassword;
     await user.save();
 
-    // Modified to include 20m expiry
-    const token = jwt.sign(
-      { id: user._id, role: user.role },
-      JWT_SECRET,
-      { expiresIn: JWT_EXPIRES_IN }
-    );
-
-    res.json({ 
-      message: 'Password reset successfully',
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
-        ...(user.subject && { subject: user.subject })
-      }
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successfully'
     });
 
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('Password reset error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Server error during password reset' 
+    });
   }
 };
 
-// Register Teacher (Preserved all existing functionality)
+// TEACHER CONTROLLERS
 exports.registerTeacher = async (req, res) => {
   try {
     const { name, email, password, subject, phone } = req.body;
 
+    // Validate input
     if (!name || !email || !password || !subject || !phone) {
       return res.status(400).json({ 
-        error: 'Name, email, password, subject, and phone are required' 
+        success: false,
+        error: 'All fields are required' 
       });
     }
 
-    const teacher = new User({ 
-      name, 
-      email, 
-      password, 
+    // Check if teacher exists
+    const existingTeacher = await Teacher.findOne({ email });
+    if (existingTeacher) {
+      return res.status(400).json({ 
+        success: false,
+        error: 'Teacher already exists' 
+      });
+    }
+
+    // Create new teacher
+    const teacher = new Teacher({
+      name,
+      email,
+      password,
       subject,
-      phone,
-      role: 'teacher' 
+      phone
     });
 
     await teacher.save();
 
-    // Modified to include 20m expiry
-    const token = jwt.sign(
-      { id: teacher._id, role: teacher.role }, 
-      JWT_SECRET, 
-      { expiresIn: JWT_EXPIRES_IN }
-    );
+    // Create and return token
+    const token = generateToken(teacher, 'teacher');
+    const teacherData = sanitizeUserData(teacher);
 
-    res.status(201).json({ 
-      message: 'Teacher registered successfully',
+    res.status(201).json({
+      success: true,
       token,
-      user: {
-        id: teacher._id,
-        name: teacher.name,
-        email: teacher.email,
-        phone: teacher.phone,
-        role: teacher.role,
-        subject: teacher.subject
-      }
+      user: teacherData,
+      message: 'Teacher registered successfully'
+    });
+
+  } catch (error) {
+    console.error('Teacher registration error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Server error during teacher registration' 
+    });
+  }
+};
+
+// COMMON CONTROLLERS
+exports.verifyToken = async (req, res) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+      return res.status(401).json({ 
+        success: false,
+        error: 'No token provided' 
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // Find user based on role
+    let user;
+    switch (decoded.role) {
+      case 'admin':
+        user = await Admin.findById(decoded.id);
+        break;
+      case 'teacher':
+        user = await Teacher.findById(decoded.id);
+        break;
+      default:
+        user = await User.findById(decoded.id);
+    }
+
+    if (!user) {
+      return res.status(404).json({ 
+        success: false,
+        error: 'User not found' 
+      });
+    }
+
+    const userData = sanitizeUserData(user);
+
+    res.status(200).json({
+      success: true,
+      user: userData,
+      role: decoded.role
+    });
+
+  } catch (error) {
+    console.error('Token verification error:', error);
+    res.status(401).json({ 
+      success: false,
+      error: 'Invalid token' 
+    });
+  }
+};
+
+exports.logoutUser = async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: 'Logout successful'
     });
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      const errors = Object.values(error.errors).map(err => err.message);
-      return res.status(400).json({ error: errors.join(', ') });
-    }
-    if (error.code === 11000) {
-      const field = Object.keys(error.keyValue)[0];
-      return res.status(400).json({ error: `${field} must be unique` });
-    }
-    res.status(400).json({ error: error.message });
+    console.error('Logout error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: 'Server error during logout' 
+    });
   }
 };

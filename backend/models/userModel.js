@@ -23,15 +23,16 @@ const UserSchema = new mongoose.Schema({
   },
   role: { 
     type: String, 
-    enum: ['user', 'teacher'], 
-    default: 'user' 
+    enum: ['user', 'teacher', 'admin'], 
+    default: 'user',
+    required: true
   },
   phone: {
     type: String,
     trim: true,
     unique: true,
-    sparse: true, // Allows multiple users with null phone
-    match: [/^\+254\d{9}$/, 'Phone number must be in +254 format'], // ✅ Validate format
+    sparse: true,
+    match: [/^\+254\d{9}$/, 'Phone number must be in +254 format'],
   },
 }, { timestamps: true });
 
@@ -48,7 +49,7 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
-// Add method to compare passwords
+// Method to compare passwords
 UserSchema.methods.comparePassword = async function(candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

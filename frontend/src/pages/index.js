@@ -197,113 +197,63 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Rest of the code remains exactly the same */}
-        {/* Registration Advertisement */}
-        <section className={`py-4 ${styles.advertSection}`}>
-          <div className="container text-center">
-            <h2 className="mb-3">Register for the Next Online Class</h2>
-            <p>
-              Join our interactive 2-hour online class for only Ksh. 200. Engage
-              with expert tutors, ask questions, and get assignments graded!
-            </p>
-            <Link href="https://wa.me/254757325802" passHref legacyBehavior>
-              <a 
-                className="btn btn-success btn-lg"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ask Questions on WhatsApp
-              </a>
-            </Link>
-          </div>
-        </section>
-
-        {/* Website Features */}
-        <section className="py-4 bg-light">
+        {/* Youtube + Blog Advert Section */}
+        <section className={`py-4 ${styles.blogAdvert}`}>
           <div className="container">
-            <h2 className="text-center mb-4">What Home Teacher Offers</h2>
-            <ul className="list-unstyled">
-              <li className="mb-2">
-                <strong>Tests and Exams:</strong> Buy, complete, and get them marked by tutors.
-              </li>
-              <li className="mb-2">
-                <strong>Contests:</strong> Compete with learners across Kenya.
-              </li>
-              <li className="mb-2">
-                <strong>Tuition:</strong> Weekend and holiday tutoring, plus evening lessons during school days.
-              </li>
-              <li className="mb-2">
-                <strong>Personal Teachers:</strong> Locate and book tutors near you.
-              </li>
-            </ul>
-            <div className="text-center mt-3">
-              <Link href="/register" passHref legacyBehavior>
-                <a className="btn btn-primary btn-lg">Sign Up Now</a>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Subscription Plans + Log Section */}
-        <section className="py-4 bg-white">
-          <div className="container">
-            <div className="row">
-              {/* Subscription Plans */}
-              <div className="col-md-6 mb-4">
-                <h2 className="text-center mb-3">Subscription Plans</h2>
-                <div className="card text-center shadow-sm mb-3">
-                  <div className="card-body">
-                    <h5 className="card-title">Exams</h5>
-                    <p className="card-text">Ksh. 30</p>
-                    <Link href="/payment/exams" passHref legacyBehavior>
-                      <a className="btn btn-primary">Pay Now</a>
-                    </Link>
-                  </div>
-                </div>
-                <div className="card text-center shadow-sm mb-3">
-                  <div className="card-body">
-                    <h5 className="card-title">ZIP Files</h5>
-                    <p className="card-text">Ksh. 60</p>
-                    <Link href="/payment/zip-files" passHref legacyBehavior>
-                      <a className="btn btn-primary">Pay Now</a>
-                    </Link>
-                  </div>
-                </div>
-                <div className="card text-center shadow-sm">
-                  <div className="card-body">
-                    <h5 className="card-title">Online Classes</h5>
-                    <p className="card-text">Ksh. 200</p>
-                    <Link href="/payment/online-classes" passHref legacyBehavior>
-                      <a className="btn btn-primary">Pay Now</a>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              {/* Log Section */}
-              <div className="col-md-6">
-                <h2 className="text-center mb-3">Check Us Out on YouTube</h2>
-                <div className="text-center">
+            <div className="row g-4">
+              {/* Youtube Snippet - always comes first */}
+              <div className="col-lg-6 order-1">
+                <h2 className="text-center mb-4">Check Us Out on YouTube</h2>
+                <div className="ratio ratio-16x9 mb-3">
                   <iframe
-                    width="100%"
-                    height="315"
                     src="https://www.youtube.com/embed/dQw4w9WgXcQ"
                     title="Home Teacher YouTube Video"
-                    className="shadow-sm"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
-                  <p className="mt-3">
-                    <Link href="https://www.youtube.com/@teacherken1" passHref legacyBehavior>
-                      <a 
-                        className="btn btn-danger"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Visit Our YouTube Channel
-                      </a>
-                    </Link>
-                  </p>
+                </div>
+                <div className="text-center">
+                  <Link href="https://www.youtube.com/@teacherken1" passHref legacyBehavior>
+                    <a 
+                      className="btn btn-danger btn-sm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit Our YouTube Channel
+                    </a>
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Blog Advert - always comes second */}
+              <div className="col-lg-6 order-2">
+                <h2 className="text-center mb-3">Latest From Our Blog</h2>
+                <div className="d-flex flex-column gap-3">
+                  {blogPosts.map((post) => (
+                    <div key={post.id} className={`card ${styles.blogCard}`}>
+                      <div className="row g-0 align-items-center">
+                        <div className="col-3">
+                          <div className="p-2">
+                            <img 
+                              src={`https://source.unsplash.com/random/300x300/?kenya,education,${post.id}`}
+                              className={`rounded-circle ${styles.blogProfileImage}`}
+                              alt={post.title}
+                              width="80"
+                              height="80"
+                            />
+                          </div>
+                        </div>
+                        <div className="col-9">
+                          <div className="card-body py-2">
+                            <h6 className={`card-title ${styles.blogTitle}`}>{post.title}</h6>
+                            <p className={`card-text ${styles.blogSummary} mb-2`}>{post.summary}</p>
+                            <Link href={`/blog/${post.slug}`} passHref legacyBehavior>
+                              <a className="btn btn-outline-primary btn-sm">Read More</a>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

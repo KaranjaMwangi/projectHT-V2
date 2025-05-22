@@ -390,3 +390,251 @@
   height: 40px;
   width: auto;
 }
+
+
+
+/* What We Offer Section */
+.whatWeOffer {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.offerContent {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.offerList {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.offerList li {
+  padding: 0.3rem 0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.offerList li:before {
+  content: "✓";
+  color: #28a745;
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.offerBtn {
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.offerBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+/* Blog Advert Section */
+.blogAdvert {
+  background-color: #fff;
+}
+
+.blogCard {
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.blogCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.blogImage {
+  border-radius: 5px 0 0 5px;
+}
+
+.blogTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.blogSummary {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+  .whatWeOffer {
+    padding: 2rem 0;
+  }
+  
+  .blogCard {
+    margin-bottom: 1rem;
+  }
+}
+
+
+/* Blog Card Adjustments */
+.blogCard {
+  transition: all 0.3s ease;
+}
+
+.blogCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.blogTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.blogSummary {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive adjustments */
+.blogProfileImage {
+  width: 80px; /* Default size (adjust if needed) */
+  height: 80px;
+  aspect-ratio: 1/1; /* Ensures perfect square */
+  object-fit: cover; /* Prevents distortion */
+  border-radius: 0 !important; /* Force square corners */
+}
+
+/* Optional: If you need different sizes on desktop */
+@media (min-width: 768px) {
+  .blogProfileImage {
+    width: 80px; 
+    height: 80px;
+  }
+}
+
+
+/* Full Width Section */
+.fullWidthSection {
+  background-color: #f8f9fa;
+  position: relative;
+  overflow: hidden;
+}
+
+.fullWidthContent {
+  position: relative;
+  padding: 3rem 0;
+}
+
+.fullWidthSection:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-color: #f8f9fa;
+  z-index: -1;
+}
+
+/* Section Title */
+.sectionTitle {
+  color: #2c3e50;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  position: relative;
+  text-align: center;
+}
+
+.sectionTitle:after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: #3498db;
+  margin: 10px auto;
+}
+
+/* Brand Name Styling */
+.brandNameHighlight {
+  color: #2c3e50;
+  font-weight: 700;
+  font-style: italic;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.brandNameInline {
+  color: #2c3e50;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Content Styling */
+.offerParagraph {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+  color: #444;
+}
+
+.inlineLink {
+  color: #3498db;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.inlineLink:hover {
+  color: #2980b9;
+  text-decoration: none;
+}
+
+/* Decorative List */
+.decorativeList {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1.5rem;
+}
+
+.decorativeList li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.decorativeList li:before {
+  content: '✓';
+  color: #27ae60;
+  font-size: 1.2rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+  
+  .offerParagraph {
+    font-size: 1rem;
+  }
+  
+  .decorativeList li {
+    font-size: 1rem;
+    padding-left: 1.8rem;
+  }
+  
+  .fullWidthContent {
+    padding: 2rem 0;
+  }
+}

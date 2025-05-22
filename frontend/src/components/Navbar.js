@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import styles from "../styles/navbar.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,7 +13,8 @@ import {
   faBlog,
   faPhone,
   faUser,
-  faSignOutAlt
+  faSignOutAlt,
+  faUserShield
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
@@ -23,13 +24,19 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const navItems = [
+  const baseNavItems = [
     { href: "/", icon: faHome, text: "Home" },
     { href: "/grades", icon: faGraduationCap, text: "Grades" },
     { href: "/downloads", icon: faDownload, text: "Downloads" },
     { href: "/teachers", icon: faChalkboardTeacher, text: "Teachers" },
     { href: "/blog", icon: faBlog, text: "Blog" }
   ];
+
+  const adminNavItem = { href: "/admin", icon: faUserShield, text: "Dashboard" };
+
+  const navItems = user?.role === 'admin' 
+    ? [...baseNavItems, adminNavItem] 
+    : baseNavItems;
 
   const getUserDisplay = () => {
     if (!user) return '';
